@@ -18,11 +18,10 @@ window,
     popular.tv_shows.forEach((show) => {
       console.log(show);
       mostPopularContainer.innerHTML += `
-        <div class="card">
-        <dv class="card-body d-flex">
-        <img src="${show.image_thumbnail_path}" alt="${show.name}" height="100" width="100">
-        <p class="card-text" p-2>${show.name}</p>
-        </div>
-        `;
+      <div class="card d-flex">
+      <img src="${show.image_thumbnail_path}" alt="${show.name}" height="100" width="100">
+      <p class="card-text">${show.name}</p>
+      </div>
+      `;
     });
   });
