@@ -16,11 +16,24 @@ window,
   (onload = async () => {
     let popular = await getData(API_URLS.popular);
     popular.tv_shows.forEach((show) => {
+      if (show.end_date == null) {
+        show.end_date = "Unknown";
+      }
       console.log(show);
       mostPopularContainer.innerHTML += `
-      <div class="card d-flex">
-      <img src="${show.image_thumbnail_path}" alt="${show.name}" height="100" width="100">
-      <p class="card-text">${show.name}</p>
+      <div class="d-flex p-2">
+      <img src="${show.image_thumbnail_path}" alt="${
+        show.name
+      }" height="100" width="100">
+      <div class="d-flex flex-column p-2">
+      <h3>${show.name} <a href="${
+        API_URLS.details + show.id
+      }" target="_blank" class="btn btn-primary btn-sm">Details</a></h3>
+      <p>Network: ${show.network}</p>
+      <p>Country: ${show.country}</p>
+      <p>Start Date: ${show.start_date} - End Date: ${show.end_date}</p>
+      <p>Status: ${show.status}</p>
+      </div>
       </div>
       `;
     });
