@@ -6,8 +6,8 @@ App with information of the most populor tv shows
 
 - [x] Find valid <a href="https://www.episodate.com/api" target="blank">TV Shows API</a>
 - [x] Add popular tv shows
+- [x] Add pagination
 - [x] Add search
   - 🔧 Debug
-- [x] Add pagination
 - [ ] Add animations
 - [ ] Deploy 🌏
