@@ -9,41 +9,51 @@ const API_URLS = {
 
 const getData = async (url) => {
   let data = await fetch(url).then((response) => response.json());
-  console.log(data);
   return data;
+};
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString();
 };
 
 window.onload = async () => {
   let popular = await getData(API_URLS.popular);
-  popular.tv_shows.forEach((show) => {
+  popular.tv_shows.forEach(async (show) => {
     if (show.end_date == null) {
       show.end_date = "Unknown";
     }
-    console.log(show);
     mainContainer.innerHTML += `
-      <div class="d-flex p-2">
-      <img src="${show.image_thumbnail_path}" alt="${
+  <div class="card border-primary mb-3 mt-2">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="${
+        show.image_thumbnail_path
+      }" class="img-fluid rounded-start" alt="${show.name}">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">${popular.tv_shows.indexOf(show) + 1} - ${
       show.name
-    }" height="100" width="100">
-      <div class="d-flex flex-column p-2">
-      <h3>${show.name} <a href="${
-      API_URLS.details + show.id
-    }" target="_blank" class="btn btn-primary btn-sm">Details</a></h3>
-      <p>Network: ${show.network}</p>
-      <p>Country: ${show.country}</p>
-      <p>Start Date: ${show.start_date} - End Date: ${show.end_date}</p>
-      <p>Status: ${show.status}</p>
+    }</h5>
+        <p class="card-text">Network: ${show.network}</p>
+        <p class="card-text">Country: ${show.country}</p>
+        <p class="card-text">Start Date: ${formatDate(show.start_date)}</p>
+        <p class="card-text">End Date: ${show.end_date}</p>
+        <a href="${
+          API_URLS.details + show.id
+        }" target="blank" class="btn btn-primary">Details</a>
       </div>
-      </div>
-      `;
+    </div>
+  </div>
+</div>
+    `;
   });
 };
-searchForm.addEventListener("submit", async (e) => {
+searchForm.addEventListener("submit", async (event) => {
   const searchData = new FormData(searchForm);
   const query = searchData.get("query");
   const url = API_URLS.search + query + "&page=1";
-  mainContainer.innerHTML = "";
-  await getData(url);
-  searchForm.reset();
-  e.preventDefault();
+  let searchResults = await getData(url);
+  event.preventDefault();
+  console.log(searchResults);
 });
