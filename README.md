@@ -8,5 +8,6 @@ App with information of the most populor tv shows
 - [x] Add popular tv shows
 - [x] Add search
   - 🔧 Debug
+- [x] Add pagination
 - [ ] Add animations
 - [ ] Deploy 🌏
