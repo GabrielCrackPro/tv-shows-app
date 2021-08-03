@@ -1,8 +1,12 @@
 const mainContainer = document.querySelector(".most-popular-container");
 const searchForm = document.querySelector("#search-form");
+const prevButton = document.querySelector(".prev-btn");
+const nextButton = document.querySelector(".next-btn");
+const pageInfo = document.querySelector(".page-info");
+let actualPage = 1;
 const API_URLS = {
   base: "https://www.episodate.com/api",
-  popular: " https://www.episodate.com/api/most-popular?page=1",
+  popular: `https://www.episodate.com/api/most-popular?page=${actualPage}`,
   search: "https://www.episodate.com/api/search?q=",
   details: "https://www.episodate.com/api/show-details?q=",
 };
@@ -16,7 +20,7 @@ const formatDate = (date) => {
   return new Date(date).toLocaleDateString();
 };
 
-window.onload = async () => {
+const getPopularShows = async () => {
   let popular = await getData(API_URLS.popular);
   popular.tv_shows.forEach(async (show) => {
     if (show.end_date == null) {
@@ -32,9 +36,7 @@ window.onload = async () => {
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        <h5 class="card-title">${popular.tv_shows.indexOf(show) + 1} - ${
-      show.name
-    }</h5>
+        <h5 class="card-title">${show.name}</h5>
         <p class="card-text">Network: ${show.network}</p>
         <p class="card-text">Country: ${show.country}</p>
         <p class="card-text">Start Date: ${formatDate(show.start_date)}</p>
@@ -49,6 +51,7 @@ window.onload = async () => {
     `;
   });
 };
+window.onload = getPopularShows();
 searchForm.addEventListener("submit", async (event) => {
   const searchData = new FormData(searchForm);
   const query = searchData.get("query");
@@ -56,4 +59,21 @@ searchForm.addEventListener("submit", async (event) => {
   let searchResults = await getData(url);
   event.preventDefault();
   console.log(searchResults);
+});
+pageInfo.textContent = `Page ${actualPage}`;
+nextButton.addEventListener("click", () => {
+  mainContainer.innerHTML = "";
+  actualPage += 1;
+  API_URLS.popular = `https://www.episodate.com/api/most-popular?page=${actualPage}`;
+  getPopularShows();
+  pageInfo.textContent = `Page ${actualPage}`;
+});
+prevButton.addEventListener("click", () => {
+  if (actualPage > 1) {
+    mainContainer.innerHTML = "";
+    actualPage -= 1;
+    API_URLS.popular = `https://www.episodate.com/api/most-popular?page=${actualPage}`;
+    getPopularShows();
+    pageInfo.textContent = `Page ${actualPage}`;
+  }
 });
